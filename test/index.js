@@ -1,10 +1,8 @@
+require("dotenv").config();
 const { MessageEmbed, BotifyClient, RowBuilder } = require("../src/index");
 
 const myClient = new BotifyClient({
-  token:
-    "MTEwMTE5NTg2NDc4Mjk0NjMwNA.G4CaJF.gV790-PqY9R0WMgGDRfpsKv9r0JSBOJ_437pok",
-  clientId: "1101195864782946304",
-  guildId: "1099816553110839357",
+  token: process.env.TOKEN,
   prefix: "!",
   intents: [
     "GuildMessages",
