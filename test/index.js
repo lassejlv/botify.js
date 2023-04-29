@@ -9,6 +9,7 @@ const myClient = new BotifyClient({
     "Guilds",
     "MessageContent",
     "GuildMessageReactions",
+    "GuildMembers",
   ],
   partials: ["Message"],
   userPresence: {
@@ -16,7 +17,7 @@ const myClient = new BotifyClient({
     activities: [{ name: "made with botify.js, build on discord.js" }],
   },
   settings: {
-    logOptions: false,
+    logOptions: true,
   },
 });
 
@@ -26,6 +27,19 @@ myClient.event({
     console.log(`Logged in as ${client.user.tag}!`);
 
     client.user.setPresence(myClient.userPresence);
+  },
+});
+
+myClient.event({
+  name: "messageReactionAdd",
+  run: (client, reaction, user) => {
+    if (user.bot) return;
+
+    if (reaction.emoji.name === "👍") {
+      reaction.message.channel.send({
+        content: `${user.tag} reacted with 👍`,
+      });
+    }
   },
 });
 
@@ -53,12 +67,57 @@ myClient.command({
         new RowBuilder()
           .addButton({
             label: "Click me to see a message in the console",
-            style: "Success",
+            style: "Secondary",
             id: "log",
+            disabled: true,
           })
           .build(),
       ],
     });
+  },
+});
+
+myClient.command({
+  name: "selectMenu",
+  run: (message) => {
+    message.reply({
+      content: "Whoaa it was easy to make this select menu!",
+      ephemeral: true,
+      components: [
+        new RowBuilder()
+          .addSelectMenu({
+            id: "selectMenu",
+            placeholder: "Select a value",
+            options: [
+              {
+                label: "Option 1",
+                value: "option1",
+              },
+
+              {
+                label: "Option 2",
+                value: "option2",
+              },
+            ],
+          })
+          .build(),
+      ],
+    });
+  },
+});
+
+myClient.command({
+  name: "react-to-my-message",
+  run: (message) => {
+    message
+      .reply({
+        content: "React to this message!",
+        ephemeral: true,
+      })
+      .then((msg) => {
+        msg.react("👍");
+        msg.react("👎");
+      });
   },
 });
 

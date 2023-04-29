@@ -46,7 +46,7 @@ class BotifyClient extends Client {
             version: require("../package.json").dependencies["discord.js"],
           },
 
-          betterdjs: {
+          botifyjs: {
             version: require("../package.json").version,
           },
 
@@ -71,6 +71,16 @@ class BotifyClient extends Client {
             event.run(this, interaction);
           }
         });
+
+        break;
+      }
+
+      case "selectMenuSubmit": {
+        this.on("interactionCreate", (interaction) => {
+          if (interaction.isSelectMenu()) {
+            event.run(this, interaction);
+          }
+        });
       }
 
       default: {
@@ -84,6 +94,17 @@ class BotifyClient extends Client {
     this.on("messageCreate", (message) => {
       if (message.content.startsWith(this.prefix + command.name)) {
         command.run(message);
+      }
+    });
+  }
+
+  // Commands without prefix
+  slashCommand(command) {
+    this.on("interactionCreate", (interaction) => {
+      if (interaction.isCommand()) {
+        if (interaction.commandName === command.name) {
+          command.run(interaction);
+        }
       }
     });
   }

@@ -40,8 +40,8 @@ class MessageEmbed {
     return this;
   }
 
-  addField(name, value, inline) {
-    this.embed.addField(name, value, inline);
+  addFields(fields) {
+    this.embed.addFields(fields);
     return this;
   }
 
